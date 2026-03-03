@@ -1,0 +1,58 @@
+# --- In routes/student_routes.py ---
+
+# --- Update Profile Route ---
+@student_bp.route('/profile', methods=['GET', 'POST'])
+def profile():
+    # ... (existing GET logic is the same) ...
+    if request.method == 'POST':
+        student = Student.query.filter_by(user_id=session.get('user_id')).first()
+        student.name = request.form['name']
+        student.department = request.form['department']
+        student.cgpa = float(request.form.get('cgpa')) if request.form.get('cgpa') else None
+        student.resume_link = request.form.get('resume_link') # <-- NEW
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('student.profile'))
+    # ... (existing GET return is the same) ...```
+
+### Step 5: Create/Update HTML Templates
+
+1.  **Create `templates/admin/manage_applications.html`**: A new page to list all applications.
+2.  **Create `templates/company/profile.html`**: A new page for companies to edit their details.
+3.  **Create `templates/company/edit_drive.html`**: A new page to edit a drive.
+4.  **Update `templates/admin/dashboard.html`**: Add the "Total Applications" card and a link to the new management page.
+5.  **Update `templates/company/dashboard.html`**: Add "Edit", "Delete", and "Close" buttons for each drive, and a link to the company profile page.
+6.  **Update `templates/student/profile.html`**: Add the input field for the resume link.
+
+This is a large update. I will provide the code for the most critical new templates.
+
+#### `templates/admin/manage_applications.html` (New File)
+```html
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>All Student Applications</h2>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Date Applied</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.student.name }}</td>
+                <td>{{ app.drive.company.name }}</td>
+                <td>{{ app.drive.job_title }}</td>
+                <td>{{ app.application_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ app.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

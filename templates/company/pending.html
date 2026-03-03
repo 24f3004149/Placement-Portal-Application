@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="alert alert-warning">
+        <h4 class="alert-heading">Account Pending Approval</h4>
+        <p>Your company profile has been submitted and is currently awaiting approval from the placement cell admin.</p>
+        <hr>
+        <p class="mb-0">You will be able to access your dashboard and create placement drives once your account is approved.</p>
+    </div>
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mt-3">Logout</a>
+</div>
+{% endblock %}

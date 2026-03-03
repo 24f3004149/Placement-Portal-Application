@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Applicants for: {{ drive.job_title }}</h3>
+        <a href="{{ url_for('company.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Student Name</th>
+                <th>Department</th>
+                <th>CGPA</th>
+                <th>Current Status</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.student.name }}</td>
+                <td>{{ app.student.department }}</td>
+                <td>{{ app.student.cgpa }}</td>
+                <td>
+                    <span class="badge 
+                        {% if app.status == 'Applied' %}bg-secondary
+                        {% elif app.status == 'Shortlisted' %}bg-info
+                        {% elif app.status == 'Selected' %}bg-success
+                        {% else %}bg-danger{% endif %}">
+                        {{ app.status }}
+                    </span>
+                </td>
+                <td>
+                    <!-- One form per student to update their status -->
+                    <form method="POST" action="{{ url_for('company.update_application_status', application_id=app.id) }}" class="d-flex">
+                        <select name="status" class="form-select form-select-sm me-2">
+                            <option value="Shortlisted" {% if app.status == 'Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                            <option value="Selected" {% if app.status == 'Selected' %}selected{% endif %}>Selected</option>
+                            <option value="Rejected" {% if app.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No students have applied for this drive yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

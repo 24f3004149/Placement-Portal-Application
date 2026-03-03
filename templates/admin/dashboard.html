@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <div class="row">
+        <!-- Companies Card -->
+        <div class="col-md-4">
+            <div class="card text-center shadow mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Companies</h5>
+                    <p class="display-4">{{ stats.total_companies }}</p>
+                    <p class="text-warning">{{ stats.pending_companies }} Pending</p>
+                    <a href="{{ url_for('admin.manage_companies') }}" class="btn btn-primary">Manage Companies</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Card -->
+        <div class="col-md-4">
+            <div class="card text-center shadow mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Students</h5>
+                    <p class="display-4">{{ stats.total_students }}</p>
+                    <p class="text-muted">Registered</p>
+                    <a href="{{ url_for('admin.manage_students') }}" class="btn btn-success">Manage Students</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drives Card -->
+        <div class="col-md-4">
+            <div class="card text-center shadow mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Placement Drives</h5>
+                    <p class="display-4">{{ stats.total_drives }}</p>
+                    <p class="text-muted">Total Posted</p>
+                    <a href="{{ url_for('admin.manage_drives') }}" class="btn btn-info text-white">Manage Drives</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Custom CSS for Login Page Background -->
+<style>
+    body {
+        /* Replace 'main_bg.jpg' with your actual image file name */
+        background-image: url("{{ url_for('static', filename='images/main_bg.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    /* Make the login card slightly transparent (95% opaque white) */
+    .login-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border: none;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow-lg login-card">
+            <div class="card-header bg-primary text-white text-center rounded-top">
+                <h4 class="mb-0 py-2">Login</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-transparent pb-3 border-0">
+                <small class="text-muted">Don't have an account? <a href="{{ url_for('auth.register') }}" class="fw-bold text-primary text-decoration-none">Register here</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
