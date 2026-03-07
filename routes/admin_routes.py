@@ -39,7 +39,6 @@ def manage_students():
     if not is_admin(): return redirect(url_for('auth.login'))
     search_query = request.args.get('q', '')
     if search_query:
-        # UPDATED: Search by ID, Name, or Email
         students = Student.query.join(User).filter(
             or_(Student.id.like(search_query), 
                 Student.name.contains(search_query),
