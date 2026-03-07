@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-# ADD `or_` to the import to allow searching by ID or Name
 from sqlalchemy import or_
 from models import db, User, Company, Student, Drive, Application
 
@@ -8,7 +7,6 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 def is_admin():
     return session.get('role') == 'admin'
 
-# --- Main Dashboard (No changes) ---
 @admin_bp.route('/dashboard')
 def dashboard():
     if not is_admin(): return redirect(url_for('auth.login'))
@@ -22,7 +20,6 @@ def dashboard():
     }
     return render_template('admin/dashboard.html', stats=stats)
 
-# --- Manage Companies (with Search by ID/Name) ---
 @admin_bp.route('/companies')
 def manage_companies():
     if not is_admin(): return redirect(url_for('auth.login'))
@@ -37,7 +34,6 @@ def manage_companies():
         
     return render_template('admin/manage_companies.html', companies=companies, search_query=search_query)
 
-# --- Manage Students (with Search by ID/Name) ---
 @admin_bp.route('/students')
 def manage_students():
     if not is_admin(): return redirect(url_for('auth.login'))
@@ -53,7 +49,6 @@ def manage_students():
         students = Student.query.all()
     return render_template('admin/manage_students.html', students=students, search_query=search_query)
 
-# --- Manage Drives (No changes) ---
 @admin_bp.route('/drives')
 def manage_drives():
     if not is_admin(): return redirect(url_for('auth.login'))
@@ -66,7 +61,6 @@ def manage_applications():
     applications = Application.query.order_by(Application.id.desc()).all()
     return render_template('admin/manage_applications.html', applications=applications)
 
-# --- NEW: Edit Student Route ---
 @admin_bp.route('/student/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
     if not is_admin(): return redirect(url_for('auth.login'))
@@ -74,10 +68,8 @@ def edit_student(id):
     student = Student.query.get_or_404(id)
     
     if request.method == 'POST':
-        # Update student details from the form
         student.name = request.form['name']
         student.department = request.form['department']
-        # Handle CGPA, which might be empty
         cgpa_str = request.form.get('cgpa')
         student.cgpa = float(cgpa_str) if cgpa_str else None
         
@@ -85,11 +77,9 @@ def edit_student(id):
         flash(f'Updated details for {student.name}.', 'success')
         return redirect(url_for('admin.manage_students'))
     
-    # Show the edit form
     return render_template('admin/edit_student.html', student=student)
 
 
-# --- All Other Actions ---
 
 @admin_bp.route('/company/approve/<int:id>')
 def approve_company(id):
