@@ -4,11 +4,9 @@ from datetime import datetime
 
 company_bp = Blueprint('company', __name__, url_prefix='/company')
 
-# Helper function to check if the user is a logged-in company
 def is_company():
     return session.get('role') == 'company'
 
-# --- Company Dashboard ---
 @company_bp.route('/dashboard')
 def dashboard():
     if not is_company():
@@ -17,18 +15,14 @@ def dashboard():
     user_id = session.get('user_id')
     company = Company.query.filter_by(user_id=user_id).first()
     
-    # !! IMPORTANT: This enforces the "Admin Approval" rule !!
     if company.status != 'Approved':
         flash('Your company profile is pending approval from the admin. You cannot access the dashboard yet.', 'warning')
-        # You can create a simple "pending" page or just redirect to logout
         return render_template('company/pending.html')
 
-    # Fetch drives created by this company
     drives = Drive.query.filter_by(company_id=company.id).order_by(Drive.id.desc()).all()
     
     return render_template('company/dashboard.html', company=company, drives=drives)
 
-# --- Create a New Placement Drive ---
 @company_bp.route('/drive/create', methods=['GET', 'POST'])
 def create_drive():
     if not is_company():
@@ -39,7 +33,6 @@ def create_drive():
         company = Company.query.filter_by(user_id=user_id).first()
         
         if company.status == 'Approved':
-            # --- THIS IS THE UPDATE ---
             deadline_str = request.form.get('application_deadline')
             deadline_obj = datetime.strptime(deadline_str, '%Y-%m-%d').date() if deadline_str else None
 
@@ -52,7 +45,6 @@ def create_drive():
                 application_deadline=deadline_obj,
                 status='Pending'
             )
-            # --------------------------
             db.session.add(new_drive)
             db.session.commit()
             flash('Placement drive created successfully! It is now pending admin approval.', 'success')
@@ -60,19 +52,16 @@ def create_drive():
             
     return render_template('company/create_drive.html')
 
-# --- View Applicants for a Specific Drive ---
 @company_bp.route('/drive/<int:drive_id>/applicants')
 def view_applicants(drive_id):
     if not is_company():
         return redirect(url_for('auth.login'))
         
     drive = Drive.query.get_or_404(drive_id)
-    # Fetch all applications for this drive
     applications = Application.query.filter_by(drive_id=drive.id).all()
     
     return render_template('company/view_applicants.html', drive=drive, applications=applications)
 
-# --- Update an Application's Status ---
 @company_bp.route('/application/update/<int:application_id>', methods=['POST'])
 def update_application_status(application_id):
     if not is_company():
@@ -85,7 +74,6 @@ def update_application_status(application_id):
     db.session.commit()
     
     flash(f"Updated {application.student.name}'s status to {new_status}", 'success')
-    # Redirect back to the list of applicants for that drive
     return redirect(url_for('company.view_applicants', drive_id=application.drive_id))
 
 @company_bp.route('/profile', methods=['GET', 'POST'])
@@ -109,7 +97,7 @@ def edit_drive(drive_id):
     if request.method == 'POST':
         drive.job_title = request.form['job_title']
         drive.description = request.form['description']
-        # ... update other fields as needed ...
+        
         db.session.commit()
         flash('Drive updated successfully!', 'success')
         return redirect(url_for('company.dashboard'))

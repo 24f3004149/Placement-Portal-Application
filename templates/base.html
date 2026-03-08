@@ -19,15 +19,6 @@
             background-color: #f8f9fa; /* Fallback color */
         }
 
-        /* Check which role is logged in and apply the correct image */
-        {% if session.get('role') == 'admin' %}
-            body { background-image: url("{{ url_for('static', filename='images/admin_bg.jpg') }}"); }
-        {% elif session.get('role') == 'company' %}
-            body { background-image: url("{{ url_for('static', filename='images/company_bg.jpg') }}"); }
-        {% elif session.get('role') == 'student' %}
-            body { background-image: url("{{ url_for('static', filename='images/student_bg.jpg') }}"); }
-        {% endif %}
-
         /* Make all cards slightly transparent so the background shows through */
         .card {
             background-color: rgba(255, 255, 255, 0.92); /* 92% white */
@@ -40,6 +31,15 @@
             background-color: rgba(255, 255, 255, 0.92) !important;
         }
     </style>
+
+    <!-- Apply background based on user role -->
+    {% if session.get('role') == 'admin' %}
+        <style>body { background-image: url("{{ url_for('static', filename='images/admin_bg.jpg') }}"); }</style>
+    {% elif session.get('role') == 'company' %}
+        <style>body { background-image: url("{{ url_for('static', filename='images/company_bg.jpg') }}"); }</style>
+    {% elif session.get('role') == 'student' %}
+        <style>body { background-image: url("{{ url_for('static', filename='images/student_bg.jpg') }}"); }</style>
+    {% endif %}
 </head>
 <body>
 
