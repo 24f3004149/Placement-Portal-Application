@@ -3,8 +3,9 @@
 {% block content %}
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Student Dashboard</h2>
+        <h2 style="color: pink;">Student Dashboard</h2>
         <div>
+            
             <a href="{{ url_for('student.my_applications') }}" class="btn btn-info text-white">My Applications</a>
             <a href="{{ url_for('student.profile') }}" class="btn btn-secondary">Edit Profile</a>
         </div>
@@ -13,7 +14,7 @@
     <div class="row">
         <!-- Left Column: Available Drives -->
         <div class="col-md-8">
-            <h4>Available Placement Drives</h4>
+            <h4 style="color: yellow;">Available Placement Drives</h4>
             {% for drive in drives %}
                 <div class="card mb-3">
                     <div class="card-body">
@@ -31,7 +32,7 @@
 
         <!-- Right Column: Applied Drives Summary -->
         <div class="col-md-4">
-            <h4>Applied Drives</h4>
+            <h4 style="color: yellow;">Applied Drives</h4>
             <ul class="list-group">
                 {% for app in my_applications %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
