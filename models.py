@@ -3,7 +3,6 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-# ... (User model is unchanged) ...
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,7 +12,6 @@ class User(db.Model):
     company_profile = db.relationship('Company', backref='user', uselist=False, cascade="all, delete")
     student_profile = db.relationship('Student', backref='user', uselist=False, cascade="all, delete")
 
-# UPDATED Company Model
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -47,7 +45,7 @@ class Student(db.Model):
         cascade="all, delete-orphan"
     )
 
-# UPDATED Drive Model
+
 class Drive(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
@@ -66,7 +64,7 @@ class Drive(db.Model):
 
     status = db.Column(db.String(20), default='Pending')
 
-# UPDATED Application Model
+
 class Application(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
