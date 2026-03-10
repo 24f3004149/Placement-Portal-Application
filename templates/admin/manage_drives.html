@@ -28,14 +28,25 @@
                 </td>
                 <td>
                     {% if drive.status == 'Pending' %}
-                        <a href="{{ url_for('admin.approve_drive', id=drive.id) }}" class="btn btn-sm btn-success">Approve</a>
+                    <a href="{{ url_for('admin.approve_drive', id=drive.id) }}"
+                        class="btn btn-sm btn-success">Approve</a>
+                    <a href="{{ url_for('admin.reject_drive', id=drive.id) }}" class="btn btn-sm btn-danger">Reject</a>
+                    {% elif drive.status == "Approved" %}
+
+                    <span class="text-success">Approved</span>
+
                     {% else %}
-                        <span class="text-muted">Approved</span>
+
+                    <span class="text-danger">Rejected</span>
+
                     {% endif %}
+                    
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="4" class="text-center">No drives found.</td></tr>
+            <tr>
+                <td colspan="4" class="text-center">No drives found.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
